@@ -22,13 +22,157 @@
       <h1>pick<span style="color:white;">.<span style="color:#e06c75;">one</span></span>:</h1>
     </div>
     <div class="images">
-      <img src="images/rock.png" alt="paper">
-      <img src="images/paper.png" alt="paper">
-      <img src="images/scissors.png" alt="paper">
+      <button class="choice" id="rock"><img src="images/rock.png" alt="rock"></button>
+      <button class="choice" id="paper"><img src="images/paper.png" alt="paper"></button>
+      <button class="choice" id="scissors"><img src="images/scissors.png" alt="scissors"></button>
     </div>
   </div>
-
+  <div class="computer">
+    <div class="computerpick" id="imgID">
+      <div>
+      <h1>computer<span style="color:white;">.<span style="color:#c678dd;">choice</span></span>:</h1>
+    </div>
+    </div>
+  </div>
+  <div class="computerchoice">
+    <div class="questionmark">
+      <img src="" id="computerimage" class="images">
+    </div>
+  </div>
+  <div class="pbar">
+    <div class="progressbar">
+      <div id="myBar" class="greenbar"></div>
+    </div>
+  </div>
+  <div class="winner">
+    <h1 class="result"></h1>
+  </div>
+  <div class="footer">
+    <div class="info">
+    <h1><a href="https://github.com/grxnto"target="_blank"><span style="color:#e4bb68">grxnto</span><span style="color:white;">.<span style="color:#e06c75;">github</span></span></a></h1>
+    </div>
+  </div>
   <script>
+    function computerChoice() {
+      let num = Math.floor(Math.random() * 3);
+      if (num == 0) {
+        return "rock";
+      }
+      else if (num == 1) {
+        return "paper";
+      }
+      else {
+        return "scissors"
+      }
+    }
+    function playGame(e) {
+      let pChoice = this.id;
+      let cChoice = computerChoice();
+      if (pChoice == "rock") {
+        if (cChoice == "scissors") {
+          results(pChoice, cChoice, "win")
+        }
+        else if (cChoice == "paper") {
+          results(pChoice, cChoice, "lose")
+        }
+        else {
+          results(pChoice, cChoice, "tie")
+        }
+      }
+      else if (pChoice == "paper") {
+        if (cChoice == "rock") {
+          results(pChoice, cChoice, "win")
+        }
+        else if (cChoice == "scissors") {
+          results(pChoice, cChoice, "lose")
+        }
+        else {
+          results(pChoice, cChoice, "tie")
+        }
+      }
+      else if (pChoice == "scissors") {
+        if (cChoice == "paper") {
+          results(pChoice, cChoice, "win")
+        }
+        else if (cChoice == "rock") {
+          results(pChoice, cChoice, "lose")
+        }
+        else {
+          results(pChoice, cChoice, "tie")
+        }
+      }
+    }
+    function move(cChoice) {
+      let elem = document.getElementById("myBar");   
+      let width = 1;
+      let id = setInterval(frame, 6);
+      function frame() {
+        if (width >= 100) {
+        clearInterval(id);
+        } else {
+        width++; 
+        elem.style.width = width + '%'; 
+        }
+      }
+    }
+    function changePhoto(cChoice) {
+      let image = document.getElementById('computerimage')
+      if (cChoice == "rock") {
+        image.src = "images/rock.png"
+      }
+      else if (cChoice == "paper") {
+        image.src = "images/paper.png"
+      }
+      else {
+        image.src = "images/scissors.png"
+      }
+    }
+    function revealWinner(message) {
+      let winner = document.querySelector('.winner');
+      let container = document.querySelector('.result');
+      container.remove();
+      let newcontainer = document.createElement('h1');
+      newcontainer.classList.add('result');
+      if (message == "win") {
+        newcontainer.textContent = "you.win!";
+        newcontainer.style.color = "green";
+      }
+      else if (message == "lose") {
+        newcontainer.textContent = "you.lose";
+        newcontainer.style.color = "#cd3c29";
+      }
+      else {
+        newcontainer.textContent = "its.a.tie"
+        newcontainer.style.color = "#e4bb68"
+      }
+      winner.appendChild(newcontainer)
+      
+    }
+    function results(pChoice, cChoice, message) {
+      move(cChoice);
+      setTimeout(function(){changePhoto(cChoice);}, 800);
+      setTimeout(function(){revealWinner(message);}, 850);
+    }
+    function timeoutButton(e) {
+      const button1 = document.getElementById("rock");
+      button1.disabled = true;
+      setTimeout(function() {
+      button1.disabled = false;
+      }, 1000);
+      const button2 = document.getElementById("paper");
+      button2.disabled = true;
+      setTimeout(function() {
+      button2.disabled = false;
+      }, 1000);
+      const button3 = document.getElementById("scissors");
+      button3.disabled = true;
+      setTimeout(function() {
+      button3.disabled = false;
+      }, 1000);
+    }
+    const choices = document.querySelectorAll('.choice')
+    choices.forEach(choice => choice.addEventListener('click', playGame));
+    choices.forEach(choice => choice.addEventListener('click', timeoutButton));
   </script>
 </body>
 </html>
